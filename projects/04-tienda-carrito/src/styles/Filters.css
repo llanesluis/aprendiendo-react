@@ -1,0 +1,21 @@
+.filters {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 1rem;
+
+  margin: auto;
+  max-width: 500px;
+}
+
+.filters > div {
+  display: flex;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+.filters input {
+  max-width: 100px;
+}
