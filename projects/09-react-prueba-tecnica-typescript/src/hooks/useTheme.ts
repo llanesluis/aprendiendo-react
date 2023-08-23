@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Theme } from '../types.d'
+
+type Theme = 'light' | 'dark' | 'system'
 
 // export type Theme = 'light' | 'dark' | 'system'
 

@@ -4,8 +4,6 @@ declare global {
   }
 }
 
-export type Theme = 'light' | 'dark' | 'system'
-
 export interface APIResults {
   results: User[]
   info: Info
