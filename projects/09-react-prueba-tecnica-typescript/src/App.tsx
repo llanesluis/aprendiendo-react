@@ -96,7 +96,8 @@ function App() {
           Resetear estado
         </button>
         <input
-          className="rounded-md bg-slate-200 px-2 py-1 text-black/80 dark:bg-slate-700 dark:text-white/70"
+          className="
+          rounded-md bg-slate-200 px-2 py-1 text-black/80 placeholder:italic dark:bg-slate-700 dark:text-white/70"
           placeholder="Filtra por país"
           type="text"
           value={search || ""}
