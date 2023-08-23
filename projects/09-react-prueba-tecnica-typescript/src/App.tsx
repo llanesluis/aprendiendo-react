@@ -76,7 +76,7 @@ function App() {
         React prueba técnica Typescript
       </h1>
 
-      <header className="grid max-w-[800px] grid-cols-2 justify-between gap-2 sm:grid-cols-3 sm:justify-center md:grid-cols-4 ">
+      <header className="grid max-w-[800px] grid-cols-2 justify-between gap-2 sm:grid-cols-3 sm:justify-center md:grid-cols-4 [&>button:hover]:bg-slate-200 dark:[&>button:hover]:bg-slate-700">
         <button
           onClick={toggleColoredRows}
           className="text-dark/80 rounded-full bg-slate-300 px-3 py-1 dark:bg-slate-600 dark:text-white/80 "
@@ -97,7 +97,7 @@ function App() {
         </button>
         <input
           className="
-          rounded-md bg-slate-200 px-2 py-1 text-black/80 placeholder:italic dark:bg-slate-700 dark:text-white/70"
+           rounded-md bg-slate-200 px-2 py-1 text-black/80 placeholder:italic   dark:bg-slate-700 dark:text-white/70"
           placeholder="Filtra por país"
           type="text"
           value={search || ""}
