@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { User } from "../types";
+import { fetchUsers } from "../services/fetchUsers";
 
 export default function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -13,13 +14,7 @@ export default function useUsers() {
     setLoading(true);
     setError(false);
 
-    fetch(
-      `https://randomuser.me/api?results=10&seed=midudev&page=${currentPage}`,
-    )
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Error en la petición");
-        return await res.json();
-      })
+    fetchUsers(currentPage)
       .then((res) => {
         originalUsers.current = originalUsers.current.concat(res.results);
 
