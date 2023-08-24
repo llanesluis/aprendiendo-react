@@ -1,33 +1,54 @@
-import { useEffect, useRef, useState } from 'react'
-import { User } from '../types'
+import { useEffect, useRef, useState } from "react";
+import { User } from "../types";
 
 export default function useUsers() {
-  const [users, setUsers] = useState<User[]>([])
-  const originalUsers = useRef<User[]>([])
+  const [users, setUsers] = useState<User[]>([]);
+  const originalUsers = useRef<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   //Fetching the users from the API
   useEffect(() => {
-    fetch('https://randomuser.me/api?results=100')
-      .then(async (res) => await res.json())
+    setLoading(true);
+    setError(false);
+
+    fetch(
+      `https://randomuser.me/api?results=10&seed=midudev&page=${currentPage}`,
+    )
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Error en la petición");
+        return await res.json();
+      })
       .then((res) => {
-        setUsers(res.results)
-        originalUsers.current = res.results
+        originalUsers.current = originalUsers.current.concat(res.results);
+
+        setUsers((prevUsers) => {
+          const newUsers = prevUsers.concat(res.results);
+          return newUsers;
+        });
       })
       .catch((err) => {
-        console.error(err)
+        setError(true);
+        console.error(err);
       })
-  }, [])
+      .finally(() => setLoading(false));
+  }, [currentPage]);
 
   const deleteUser = (uuid: string) => {
-    const filteredUsers = users.filter((user) => user.login.uuid !== uuid)
+    const filteredUsers = users.filter((user) => user.login.uuid !== uuid);
 
-    if (!filteredUsers) return
-    setUsers(filteredUsers)
-  }
+    if (!filteredUsers) return;
+    setUsers(filteredUsers);
+  };
 
   const setOriginalUsers = () => {
-    setUsers(originalUsers.current)
-  }
+    setUsers(originalUsers.current);
+  };
 
-  return { users, deleteUser, setOriginalUsers }
+  const loadNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  return { users, deleteUser, setOriginalUsers, loading, error, loadNextPage };
 }

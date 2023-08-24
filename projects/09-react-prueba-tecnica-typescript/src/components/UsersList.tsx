@@ -38,7 +38,7 @@ const UsersList = ({ users, coloredRows, deleteUser, handleSortBy }: Props) => {
             >
               <td>
                 <img
-                  className="m-1 mx-auto rounded-full"
+                  className=" mx-auto rounded-full"
                   src={user.picture.thumbnail}
                   alt={`Foto de ${user.name.first}`}
                 />

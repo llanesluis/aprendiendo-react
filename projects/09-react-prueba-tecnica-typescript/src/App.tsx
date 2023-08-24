@@ -4,13 +4,15 @@ import { SortBy, User } from "./types.d";
 import useUsers from "./hooks/useUsers";
 import "./App.css";
 import Theme from "./components/Theme";
+import { LoadingIcon } from "./components/Icons";
 
 function App() {
   const [coloredRows, setColoredRows] = useState(false);
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
   const [search, setSearch] = useState<string | null>(null);
 
-  const { users, deleteUser, setOriginalUsers } = useUsers();
+  const { users, loading, error, deleteUser, setOriginalUsers, loadNextPage } =
+    useUsers();
 
   const toggleColoredRows = () => {
     setColoredRows(!coloredRows);
@@ -96,21 +98,35 @@ function App() {
           Resetear estado
         </button>
         <input
-          className="
-           rounded-md bg-slate-200 px-2 py-1 text-black/80 placeholder:italic   dark:bg-slate-700 dark:text-white/70"
+          className="rounded-mdbg-slate-200 px-2 py-1 text-black/80 placeholder:italic dark:bg-slate-700 dark:text-white/70"
           placeholder="Filtra por país"
           type="text"
           value={search || ""}
           onChange={handleFilterBySearchCountry}
         />
       </header>
-      <main className="w-full">
-        <UsersList
-          users={sortedUsers as User[]}
-          coloredRows={coloredRows}
-          deleteUser={handleDelete}
-          handleSortBy={handleSortBy}
-        />
+
+      <main className=" flex w-full flex-col justify-center">
+        {users.length > 0 && (
+          <UsersList
+            users={sortedUsers as User[]}
+            coloredRows={coloredRows}
+            deleteUser={handleDelete}
+            handleSortBy={handleSortBy}
+          />
+        )}
+        {loading && <LoadingIcon />}
+        {!loading && error && <p>Ha ocurrido un error</p>}
+        {!loading && !error && users.length === 0 && <p>No hay usuarios</p>}
+
+        {!loading && !error && (
+          <button
+            className="text-dark/80 mt-2 self-center rounded-full bg-slate-300 px-3 py-1 dark:bg-slate-600 dark:text-white/80"
+            onClick={loadNextPage}
+          >
+            Cargar más usuarios
+          </button>
+        )}
       </main>
     </div>
   );
