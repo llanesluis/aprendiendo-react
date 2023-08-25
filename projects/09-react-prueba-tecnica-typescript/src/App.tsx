@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useMemo } from "react";
+import { useState, ChangeEvent, useMemo, useEffect } from "react";
 import UsersList from "./components/UsersList";
 import { SortBy, User } from "./types.d";
 import useUsers from "./hooks/useUsers";
@@ -11,7 +11,7 @@ function App() {
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
   const [search, setSearch] = useState<string | null>(null);
 
-  const { users, loading, error, deleteUser, setOriginalUsers, loadNextPage } =
+  const { users, isLoading, isError, refetch, fetchNextPage, hasNextPage } =
     useUsers();
 
   const toggleColoredRows = () => {
@@ -57,11 +57,12 @@ function App() {
   }, [filteredUsers, sorting]);
 
   const handleDelete = (uuid: string) => {
-    deleteUser(uuid);
+    //TODO: Agregar funcionalida dpara eliminar usuarios.
+    const newUsers = users.filter((user) => user.login.uuid !== uuid);
   };
 
   const handleResetState = () => {
-    setOriginalUsers();
+    refetch();
   };
 
   const handleFilterBySearchCountry = (e: ChangeEvent<HTMLInputElement>) => {
@@ -115,17 +116,23 @@ function App() {
             handleSortBy={handleSortBy}
           />
         )}
-        {loading && <LoadingIcon />}
-        {!loading && error && <p>Ha ocurrido un error</p>}
-        {!loading && !error && users.length === 0 && <p>No hay usuarios</p>}
+        {isLoading && (
+          <div className="m-auto">
+            <LoadingIcon />
+          </div>
+        )}
+        {!isLoading && isError && <p>Ha ocurrido un error</p>}
+        {!isLoading && !isError && users.length === 0 && <p>No hay usuarios</p>}
 
-        {!loading && !error && (
+        {!isLoading && !isError && users.length > 0 && hasNextPage ? (
           <button
-            className="text-dark/80 mt-2 self-center rounded-full bg-slate-300 px-3 py-1 dark:bg-slate-600 dark:text-white/80"
-            onClick={loadNextPage}
+            className="text-dark/80 mt-2 self-center rounded-full bg-slate-300 px-3 py-1 hover:opacity-70 dark:bg-slate-600 dark:text-white/90"
+            onClick={() => fetchNextPage()}
           >
             Cargar más usuarios
           </button>
+        ) : (
+          <p>No hay mas resultados</p>
         )}
       </main>
     </div>

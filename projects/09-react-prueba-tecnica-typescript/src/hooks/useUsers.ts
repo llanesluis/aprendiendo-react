@@ -1,49 +1,30 @@
-import { useEffect, useRef, useState } from "react";
-import { User } from "../types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchUsers } from "../services/fetchUsers";
+import { User } from "../types.d";
+import { useRef } from "react";
 
 export default function useUsers() {
-  const [users, setUsers] = useState<User[]>([]);
   const originalUsers = useRef<User[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  //Fetching the users from the API
-  useEffect(() => {
-    setLoading(true);
-    setError(false);
+  //El hook useQuery no permite realizar paginacion infinita, para eso esta useInfiniteQuery
+  const { data, isLoading, isError, refetch, hasNextPage, fetchNextPage } =
+    useInfiniteQuery<{ users: User[]; nextCursor?: number }>(
+      ["users"],
+      fetchUsers,
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        refetchOnWindowFocus: false, //Internamente vuelve a hacer el fetch para mantener actualizado
+      },
+    );
 
-    fetchUsers(currentPage)
-      .then((res) => {
-        originalUsers.current = originalUsers.current.concat(res.results);
+  const users: User[] = data?.pages?.flatMap((page) => page.users) ?? [];
 
-        setUsers((prevUsers) => {
-          const newUsers = prevUsers.concat(res.results);
-          return newUsers;
-        });
-      })
-      .catch((err) => {
-        setError(true);
-        console.error(err);
-      })
-      .finally(() => setLoading(false));
-  }, [currentPage]);
-
-  const deleteUser = (uuid: string) => {
-    const filteredUsers = users.filter((user) => user.login.uuid !== uuid);
-
-    if (!filteredUsers) return;
-    setUsers(filteredUsers);
+  return {
+    users,
+    refetch,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
   };
-
-  const setOriginalUsers = () => {
-    setUsers(originalUsers.current);
-  };
-
-  const loadNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  return { users, deleteUser, setOriginalUsers, loading, error, loadNextPage };
 }

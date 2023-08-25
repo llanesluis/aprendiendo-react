@@ -115,7 +115,7 @@ export const SystemIcon = () => {
 export const LoadingIcon = () => {
   return (
     <svg
-      className="animate-spin dark:invert"
+      className="animate-spin-slow dark:invert"
       xmlns="http://www.w3.org/2000/svg"
       height="4em"
       width="4em"
