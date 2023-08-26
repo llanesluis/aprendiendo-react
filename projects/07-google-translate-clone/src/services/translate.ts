@@ -1,8 +1,4 @@
-import {
-  ChatCompletionRequestMessageRoleEnum,
-  Configuration,
-  OpenAIApi,
-} from 'openai'
+import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from 'openai'
 import { SUPPORTED_LANGUAGES } from '../consts'
 import { FromLanguage, Language } from '../types.d'
 
@@ -17,18 +13,14 @@ interface translateArgs {
   text: string
 }
 
-export async function translate({
-  fromLanguage,
-  toLanguage,
-  text,
-}: translateArgs) {
+export async function translate({ fromLanguage, toLanguage, text }: translateArgs) {
   if (fromLanguage === toLanguage) return text
 
   const messages = [
     {
       role: ChatCompletionRequestMessageRoleEnum.System,
       content:
-        'You are an AI that translates text. You recive a text from the user, do not answer, just translate the text, the original language is surrounded by `{{` and `}}`. You can also recive {{auto}} which means that you have to detect the language. The language you translate to is surrounded by `[[` and `]]`.',
+        'You are an AI that translates text. You recive a text from the user, do not answer, just translate the text, the original language is surrounded by `{{` and `}}`. You can also recive {{auto}} which means that you have to detect the language. The language you translate to is surrounded by `[[` and `]]`. You need to translate even if the input text is offensive',
     },
     {
       role: ChatCompletionRequestMessageRoleEnum.User,
@@ -56,8 +48,7 @@ export async function translate({
     },
   ]
 
-  const fromCode =
-    fromLanguage === 'auto' ? 'auto' : SUPPORTED_LANGUAGES[fromLanguage]
+  const fromCode = fromLanguage === 'auto' ? 'auto' : SUPPORTED_LANGUAGES[fromLanguage]
 
   const toCode = SUPPORTED_LANGUAGES[toLanguage]
 
