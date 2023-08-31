@@ -1,7 +1,7 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import { useQuestionsStore } from '../store/questions'
 import Question from './Question'
-import { ArrowBackIos, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
+import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import Footer from './Footer'
 
 export default function Game() {
@@ -10,7 +10,6 @@ export default function Game() {
   const currentQuestion = useQuestionsStore((state) => state.currentQuestion)
   const goNextQuestion = useQuestionsStore((state) => state.goNextQuestion)
   const goPreviousQuestion = useQuestionsStore((state) => state.goPreviousQuestion)
-  const resetGame = useQuestionsStore((state) => state.resetGame)
 
   //! No se hace una destructuracion porque forzas renderizados aun cuando lo que extraes no cambia
   //! cualquier cambio de toda la store provocaria un renderizado
@@ -34,7 +33,6 @@ export default function Game() {
         <Question info={questionInfo} />
       </Stack>
       <Footer />
-      <Button onClick={resetGame}>Volver al inicio</Button>
     </>
   )
 }
