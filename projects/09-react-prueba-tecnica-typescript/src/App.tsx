@@ -6,6 +6,8 @@ import "./App.css";
 import Theme from "./components/Theme";
 import { LoadingIcon } from "./components/Icons";
 
+//TODO: SE ROMPIO LA FUNCIONALIDAD DE ELIMINAR USUARIOS...
+
 function App() {
   const [coloredRows, setColoredRows] = useState(false);
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
@@ -57,7 +59,7 @@ function App() {
   }, [filteredUsers, sorting]);
 
   const handleDelete = (uuid: string) => {
-    //TODO: Agregar funcionalida dpara eliminar usuarios.
+    //TODO: Agregar funcionalidad dpara eliminar usuarios.
     const newUsers = users.filter((user) => user.login.uuid !== uuid);
   };
 
