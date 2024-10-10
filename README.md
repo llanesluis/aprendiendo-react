@@ -1,3 +1,4 @@
-#CURSO PRÁCTICO DE REACT
+# CURSO PRÁCTICO DE REACT
 
-Curso basado en proyectos para aprender React y buenas prácticas. De Midudev
+Basado en proyectos para aprender React y buenas prácticas. 
+De Midudev => https://cursoreact.dev/
